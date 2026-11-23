@@ -39,6 +39,32 @@ Desktop/Projects/Project/        <- parent folder, has its own (empty) .git
 
 ## What we did
 
-1. `git init` inside `papermind/`.
+1. Checked the existing state before touching anything:
+   ```
+   git status
+   git rev-parse --show-toplevel
+   git rev-parse --git-dir
+   ```
+   This is what revealed the parent folder's empty repo and its toplevel at
+   `Project/` instead of `papermind/`.
 2. Added a `.gitignore` (OS junk, common dependency/build folders).
-3. Committed everything currently in `papermind/` (CLAUDE.md, docs/, learning/) as the first commit.
+3. Initialized papermind's own repo and confirmed it was scoped correctly:
+   ```
+   git init
+   git rev-parse --show-toplevel   # -> .../papermind
+   git rev-parse --git-dir          # -> .git (papermind's own)
+   git status                       # only papermind's own files show up
+   ```
+4. Staged and committed everything currently in `papermind/` (`.gitignore`, `CLAUDE.md`, `docs/`, `learning/`) as the first commit:
+   ```
+   git add .gitignore CLAUDE.md docs learning
+   git commit -m "Initialize papermind as its own git repo ..."
+   git log --oneline
+   ```
+5. Renamed the `setup` learning topic to `01_setup` and updated its references:
+   ```
+   git mv learning/setup learning/01_setup
+   git add -A
+   git commit -m "Number the learning topic folder: setup -> 01_setup ..."
+   git log --oneline
+   ```
