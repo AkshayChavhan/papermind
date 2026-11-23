@@ -1,0 +1,23 @@
+# OS junk
+.DS_Store
+
+# Dependencies / envs
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Build output
+dist/
+build/
+.next/
+
+# Env secrets
+.env
+.env.*
+!.env.example
+
+# Editor
+.vscode/
+.idea/
