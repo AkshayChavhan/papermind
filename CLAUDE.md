@@ -19,3 +19,9 @@ See [`docs/PROJECT_FLOW.md`](docs/PROJECT_FLOW.md) for the full picture of this 
    ```
     01_repo_setup_01_init_git_<description_of_ticket_in_10_words>
    ```
+
+## Branch rules
+
+1. **One branch per topic.** Before starting work on a new topic, create a new branch off `main`, named after the topic itself, in order, e.g. `01_repo_setup`, `02_claude_code_rules`, `03_frontend`, ...
+2. Do all of that topic's work and commits on that branch (per the commit message format above).
+3. **Merge via PR.** When the topic's work is done and confirmed, push the branch and open a GitHub PR (`gh pr create`) to merge it into `main`. Merge the PR on GitHub rather than merging locally.
