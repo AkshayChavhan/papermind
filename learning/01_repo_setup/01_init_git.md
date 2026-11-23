@@ -1,52 +1,28 @@
-# 01 — Initializing git for papermind
+# 01 — Git: initialize and publish
 
 ## What's about to happen
 
-We're turning `papermind/` into its own git repository, so every future
-task's changes get committed with a message explaining what and why.
+Turn `papermind/` into a git repo, then publish it to GitHub.
 
-## Why this way
+## Why
 
-papermind is its own project, so it gets its own repo with its own clean
-history — separate from whatever else lives alongside it on disk. We also
-add a `.gitignore` so editor/OS junk (`.DS_Store`, etc.) and any future
-dependency folders (`node_modules/`, `.venv/`, etc.) never get committed by
-accident.
-
-## Diagram
-
-```
-papermind/
-├── .git/          <- NEW: papermind's own repo
-├── .gitignore     <- NEW
-├── CLAUDE.md
-├── docs/
-└── learning/
-```
+Every change needs a commit history, and the project needs a home on GitHub
+so it can be pushed to and shared from.
 
 ## What we did
 
-1. Added a `.gitignore` (OS junk, common dependency/build folders).
-2. Initialized the repo and checked it:
-   ```
-   git init
-   git rev-parse --show-toplevel   # -> .../papermind
-   git rev-parse --git-dir          # -> .git
-   git status
-   ```
-3. Staged and committed everything currently in `papermind/` (`.gitignore`, `CLAUDE.md`, `docs/`, `learning/`) as the first commit:
-   ```
-   git add .gitignore CLAUDE.md docs learning
-   git commit -m "Initialize papermind as its own git repo ..."
-   git log --oneline
-   ```
-4. Renamed the learning topic `setup` to `01_setup`, then to `01_repo_setup` (more specific), updating references each time:
-   ```
-   git mv learning/setup learning/01_setup
-   git add -A
-   git commit -m "Number the learning topic folder: setup -> 01_setup ..."
+**1. Initialize locally**
+```
+git init
+git add .gitignore CLAUDE.md docs learning
+git commit -m "Initialize papermind as its own git repo"
+```
 
-   git mv learning/01_setup learning/01_repo_setup
-   git add -A
-   git commit -m "Rename learning topic: 01_setup -> 01_repo_setup ..."
-   ```
+**2. Publish to GitHub**
+```
+gh repo create papermind --public --source=. --remote=origin --push
+```
+This one command creates the GitHub repo, adds it as the `origin` remote,
+and pushes `main` to it in one step.
+
+Result: [github.com/AkshayChavhan/papermind](https://github.com/AkshayChavhan/papermind)
