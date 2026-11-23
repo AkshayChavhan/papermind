@@ -68,3 +68,11 @@ Desktop/Projects/Project/        <- parent folder, has its own (empty) .git
    git commit -m "Number the learning topic folder: setup -> 01_setup ..."
    git log --oneline
    ```
+6. Narrowed the topic name further to `01_repo_setup` (more specific than
+   plain "setup") and updated its references again:
+   ```
+   git mv learning/01_setup learning/01_repo_setup
+   git add -A
+   git commit -m "Rename learning topic: 01_setup -> 01_repo_setup ..."
+   git log --oneline
+   ```

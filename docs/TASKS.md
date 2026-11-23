@@ -4,7 +4,7 @@ Every task we work on gets a row here. Status is updated the moment the task is 
 
 | # | Task | Status | Learning doc(s) | Notes |
 |---|------|--------|------------------|-------|
-| 1 | Initialize git for papermind | Done | [learning/01_setup/01_init_git.md](../learning/01_setup/01_init_git.md) | Scoped repo inside `papermind/`, independent of the parent folder's repo |
+| 1 | Initialize git for papermind | Done | [learning/01_repo_setup/01_init_git.md](../learning/01_repo_setup/01_init_git.md) | Scoped repo inside `papermind/`, independent of the parent folder's repo |
 
 **Status values:** `Todo` · `In Progress` · `Done`
 
