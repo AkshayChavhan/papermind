@@ -33,4 +33,8 @@ gh repo create papermind --public --source=. --remote=origin --push
 This one command creates the GitHub repo under the active account, adds it
 as the `origin` remote, and pushes `main` to it.
 
+`origin` is just a local nickname for that GitHub URL — so `git push`/`git
+pull` with no arguments know which remote to talk to without us typing the
+full URL every time. Check what it points to with `git remote -v`.
+
 Result: [github.com/AkshayChavhan/papermind](https://github.com/AkshayChavhan/papermind)
