@@ -6,7 +6,7 @@ This folder holds a step-by-step record of how the project was built, for re-rea
 
 ```
 learning/
-  setup/
+  01_setup/
     01_install_project.md
     02_installing_dependencies.md
   frontend/
