@@ -6,8 +6,8 @@ Every task we work on gets a row here. Status is updated the moment the task is 
 |---|------|--------|------------------|-------|
 | 1 | Initialize git for papermind | Done | [learning/01_repo_setup/01_init_git.md](../learning/01_repo_setup/01_init_git.md) | Scoped repo inside `papermind/`, independent of the parent folder's repo |
 | 2 | Add Claude Code working rules (git + branch rules) | Done | — | Branch `02_claude_code_rules`, merged via PR #1 |
-| 3 | Phase 1 · Step 1 — project structure + Python env | Done | [learning/backend/01_project_setup.md](../learning/backend/01_project_setup.md) | Branch `03_project_setup`; chose `venv` over `conda`/`uv` |
-| 4 | Phase 1 · Step 2 — PDF ingestion w/ LlamaIndex loaders + chunking | Todo | — | |
+| 3 | Phase 1 · Step 1 — project structure + Python env | Done | [learning/02_backend_setup/01_project_setup.md](../learning/02_backend_setup/01_project_setup.md) | Branch `03_project_setup`; chose `venv` over `conda`/`uv` |
+| 4 | Phase 1 · Step 2 — PDF ingestion w/ LlamaIndex loaders + chunking | Done | [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md) | Branch `04_pdf_ingestion`; `PDFReader` + `SentenceSplitter` (512/50), page_label kept through chunking |
 | 5 | Phase 2 — Vector store + RAG (Qdrant local, hybrid search, re-ranker) | Todo | — | |
 | 6 | Phase 3 — LLM layer (LangChain wrappers, 4-provider config switch) | Todo | — | Paid APIs involved — will warn before use |
 | 7 | Phase 4 — Prompts v1 → v2 → v3, compared on eval scores | Todo | — | |

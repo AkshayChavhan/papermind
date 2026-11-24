@@ -4,7 +4,7 @@ This project exists to learn how to build things to a high engineering standard 
 
 ## Rules for every task
 
-1. **Before starting**, write/update a learning doc at `learning/<topic>/NN_description.md` (topics: `setup`, `frontend`, `backend`, `documents`, `rag-pipeline`, etc. — add topics as needed) explaining what's about to happen and why. Keep it short, plain language, add a diagram if it helps.
+1. **Before starting**, write/update a learning doc at `learning/NN_topic/MM_description.md`, where `NN_topic` is numbered in the order topics were first introduced (e.g. `01_repo_setup`, `02_backend_setup`, `03_documents_ingestion`, ...) and `MM_description.md` numbers docs within that topic. Explain what's about to happen and why. Keep it short, plain language, add a diagram if it helps.
 2. Do the work.
 3. **After finishing**, recheck the doc against what actually happened, update it if it drifted, then ask the user to confirm it's correct / makes sense. Fold in any correction immediately.
 4. Update [`docs/TASKS.md`](docs/TASKS.md): move the task's status to `Done`.
