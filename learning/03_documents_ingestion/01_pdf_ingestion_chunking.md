@@ -20,26 +20,14 @@ so the experiment is fully reproducible from code alone.
 
 ## Why this way
 
-**Loader: LlamaIndex's `SimpleDirectoryReader` / `PDFReader`**
-Already the decided stack (see [ARCHITECTURE.md](../../docs/ARCHITECTURE.md)).
-It reads a PDF page-by-page and keeps each page as its own `Document`, with
-`page_label` in the metadata — that page number is what later becomes the
-citation ("see page 4") the whole app is built around, so it has to survive
-from the very first step.
+**Loader: LlamaIndex's `PDFReader`**
+Keeps each page as its own `Document` with a `page_label`, so page-number citations survive from day one.
 
-**Chunker: `SentenceSplitter` (LlamaIndex), not a plain fixed-size splitter**
-A dumb fixed-size splitter can cut a sentence in half mid-thought, which hurts
-retrieval quality. `SentenceSplitter` breaks on sentence/paragraph boundaries
-first and only falls back to a hard cut if a sentence itself is longer than
-the chunk size. It also keeps the originating page's metadata on every chunk
-it produces, so citations survive chunking too.
+**Chunker: `SentenceSplitter`, not fixed-size**
+Breaks on sentence boundaries instead of cutting mid-thought, and carries each chunk's page metadata forward too.
 
-**Chunk size / overlap: 512 tokens / 50 token overlap (starting point)**
-512 is a common starting chunk size for RAG — big enough to hold a full idea,
-small enough to stay cheap to embed and precise to retrieve. A 50-token
-overlap means an idea split across a chunk boundary still appears whole in at
-least one chunk. Both are easy to tune later once Phase 2 adds retrieval and
-we can measure answer quality, not just guess.
+**Chunk size / overlap: 512 / 50 tokens**
+A common RAG starting point — big enough per idea, cheap to embed, overlap keeps split ideas whole; tunable later.
 
 ## Diagram
 
@@ -70,13 +58,27 @@ we can measure answer quality, not just guess.
 
 ## What we did
 
-1. Activated `backend/.venv` and installed the first real packages:
-   `llama-index-core`, `llama-index-readers-file`, `pypdf` (PDF parsing),
-   `reportlab` (sample-PDF generation), `jupyter` + `ipykernel` (to run the
-   notebook). `requirements.txt` now pins these versions.
-2. Added `backend/notebooks/generate_sample_pdf.py` — builds a throwaway
-   4-page PDF (abstract/intro/method/results) under
-   `backend/notebooks/data/` (gitignored, regenerated each run).
+1. Activated the venv Step 1 created, and installed the first real packages
+   into it:
+   ```
+   cd backend
+   source .venv/bin/activate
+   pip install llama-index-core llama-index-readers-file pypdf reportlab jupyter ipykernel
+   ```
+   `requirements.txt` now pins the installed versions, one per line, with a
+   short comment on what each package is for:
+   `llama-index-core` (loader + chunking framework), `llama-index-readers-file`
+   (PDF page reader), `pypdf` (the PDF parser underneath), `reportlab`
+   (generates the sample test PDF below), `jupyter` (the notebook interface —
+   shows cells and their output) and `ipykernel` (the engine that actually
+   runs the Python inside those cells — see "Why a notebook" below).
+2. Added `backend/notebooks/generate_sample_pdf.py` — a script that builds a
+   throwaway 4-page PDF (abstract/intro/method/results) so the notebook has
+   something to load without a real paper committed to the repo:
+   ```
+   python notebooks/generate_sample_pdf.py
+   # -> backend/notebooks/data/sample.pdf (gitignored, regenerated on demand)
+   ```
 3. Added `backend/notebooks/01_pdf_ingestion.ipynb`:
    - Loads the sample PDF with `PDFReader` → 4 page-`Document`s, each
      carrying `metadata["page_label"]`.
@@ -84,5 +86,26 @@ we can measure answer quality, not just guess.
      → one chunk per page at this size (the sample pages are short; longer
      real papers will show multi-chunk pages and cross-page overlap).
    - Confirmed `page_label` metadata survives onto every chunk.
-4. Executed the notebook in place (`jupyter nbconvert --execute`) so it's
-   committed with real output, not empty cells.
+4. Ran the whole notebook from the terminal, writing real output back into
+   the file (so it's committed already-run, not empty cells):
+   ```
+   jupyter nbconvert --to notebook --execute --inplace notebooks/01_pdf_ingestion.ipynb
+   ```
+
+## Why a notebook (not just a script)?
+
+Jupyter and ipykernel split into two jobs: **Jupyter** is the notebook
+itself — the boxes ("cells") you write code in and see the result printed
+right underneath, like a dining room where you sit. **ipykernel** is what
+actually *runs* that Python code when you execute a cell — the kitchen/chef
+behind the scenes, which also remembers variables from earlier cells. Jupyter
+without ipykernel would just be an empty room with a "Run" button that does
+nothing.
+
+We used a notebook here (instead of a plain `.py` script) because this step
+is exploration, not production code: trying the loader, checking what a
+`Document`'s metadata looks like, tuning chunk size — all things that are
+easier to see step-by-step with output under each step, rather than running
+a whole script and only seeing the final `print`. Once this logic is solid,
+Phase 6's FastAPI/Flask services will reimplement it as plain reusable
+Python — no notebook, no Jupyter, no ipykernel needed at that point.
