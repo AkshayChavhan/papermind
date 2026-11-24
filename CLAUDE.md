@@ -15,7 +15,8 @@ See [`docs/PROJECT_FLOW.md`](docs/PROJECT_FLOW.md) for the full picture of this 
 ## Git rules
 
 1. **Never commit without asking first.** Always get explicit permission from the user before running `git commit` (or `git push`), even if the rest of the task is already approved.
-2. **Commit message format:** use the related learning doc's path, with `/` replaced by `_` and the `.md` dropped — e.g. a doc at `learning/01_repo_setup/01_init_git.md` commits as:
+2. **When told to commit, do the whole sequence.** A single "commit" instruction authorizes `git commit` → `git push` → opening a PR against `main` (`gh pr create`) as one combined action — don't stop partway and ask again between those steps.
+3. **Commit message format:** use the related learning doc's path, with `/` replaced by `_` and the `.md` dropped — e.g. a doc at `learning/01_repo_setup/01_init_git.md` commits as:
    ```
     01_repo_setup_01_init_git_<description_of_ticket_in_10_words>
    ```

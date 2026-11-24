@@ -1,22 +1,39 @@
 # Architecture — papermind
 
-> Status: **not decided yet** — this project just started. This doc will fill in as we pick a stack and build pieces.
+> Status: **stack decided, pieces being built one at a time.** This doc fills in as each piece actually exists.
 
 ## What this project is
 
-**papermind** is a learning project. The goal isn't just "make it work" — it's to practice building it the way a high-standards company would: clean structure, documented decisions, reviewable steps.
+**papermind** is a learning project: a research-paper Q&A app. Upload PDFs,
+ask questions, get answers with page-level citations and quality scores.
+The goal isn't just "make it work" — it's to practice building it the way a
+high-standards company would (clean structure, documented decisions,
+reviewable steps) *and* to learn the Python/RAG/LLM stack along the way,
+since the primary stack outside this is JS/TS (React, Next.js, Node).
 
-## What goes here (once decided)
+## Stack (decided, built up phase by phase — see TASKS.md)
 
-- The big pieces (e.g. frontend, backend, database, RAG pipeline) and how they talk to each other.
-- Why each tech choice was made, not just what it is.
-- A diagram of the pieces, kept in this file and updated whenever a piece is added or changed.
+- **Backend core:** Python
+- **LLM orchestration:** LangChain, LangGraph, LlamaIndex
+- **Vector DB:** Qdrant (local mode, main build) — Pinecone/Weaviate/ChromaDB covered as comparisons
+- **LLM APIs:** OpenAI, Anthropic, Google Vertex AI, AWS Bedrock (switchable via config)
+- **RAG:** chunking, embeddings, hybrid search, re-ranking
+- **API:** FastAPI (main), Flask (ingestion service)
+- **Front-end:** Next.js (TypeScript), streaming chat UI with citation links
+- **Evaluation:** RAGAS, TruLens, custom citation-check metric
+- **Observability:** LangSmith, JSON logging, Jupyter notebooks
+- **Demo:** Streamlit (before the Next.js UI)
+- **Deployment:** VPS + PM2
+
+## Pieces built so far
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │  (not yet)  │ --> │  (not yet)  │ --> │  (not yet)  │
 └─────────────┘     └─────────────┘     └─────────────┘
 ```
+
+(Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
 ## Related docs
 
