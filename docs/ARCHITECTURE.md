@@ -29,15 +29,20 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
 
 ```
 ┌───────────┐     ┌───────────┐     ┌─────────────┐     ┌─────────────┐
-│ PDF file  │ --> │ PDFReader │ --> │  Sentence   │ --> │  (not yet:  │
-│           │     │ (pages w/ │     │  Splitter   │     │  embed +    │
-│           │     │ page_label)│     │ (512/50)    │     │  Qdrant)    │
+│ PDF file  │ --> │ PDFReader │ --> │  Sentence   │ --> │   Qdrant     │
+│           │     │ (pages w/ │     │  Splitter   │     │ collection   │
+│           │     │ page_label)│     │ (512/50)    │     │ (384-dim,   │
+│           │     │           │     │             │     │  empty for  │
+│           │     │           │     │             │     │  now)       │
 └───────────┘     └───────────┘     └─────────────┘     └─────────────┘
 ```
 
-PDF ingestion + chunking (`backend/notebooks/01_pdf_ingestion.ipynb`) is the
-first piece built — see
-[learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md).
+PDF ingestion + chunking (`backend/notebooks/01_pdf_ingestion.ipynb`) and the
+Qdrant local-mode collection (`backend/notebooks/02_qdrant_setup.ipynb`) are
+the pieces built so far — see
+[learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md)
+and
+[learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 

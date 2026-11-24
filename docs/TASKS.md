@@ -8,16 +8,20 @@ Every task we work on gets a row here. Status is updated the moment the task is 
 | 2 | Add Claude Code working rules (git + branch rules) | Done | — | Branch `02_claude_code_rules`, merged via PR #1 |
 | 3 | Phase 1 · Step 1 — project structure + Python env | Done | [learning/02_backend_setup/01_project_setup.md](../learning/02_backend_setup/01_project_setup.md) | Branch `03_project_setup`; chose `venv` over `conda`/`uv` |
 | 4 | Phase 1 · Step 2 — PDF ingestion w/ LlamaIndex loaders + chunking | Done | [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md) | Branch `04_pdf_ingestion`; `PDFReader` + `SentenceSplitter` (512/50), page_label kept through chunking |
-| 5 | Phase 2 — Vector store + RAG (Qdrant local, hybrid search, re-ranker) | Todo | — | |
-| 6 | Phase 3 — LLM layer (LangChain wrappers, 4-provider config switch) | Todo | — | Paid APIs involved — will warn before use |
-| 7 | Phase 4 — Prompts v1 → v2 → v3, compared on eval scores | Todo | — | |
-| 8 | Phase 5 — LangGraph workflow (retrieve → grade → generate → verify → not-found) | Todo | — | |
-| 9 | Phase 6 — FastAPI service + Flask ingestion service | Todo | — | |
-| 10 | Phase 7 — Evaluation (RAGAS, TruLens, custom citation check) | Todo | — | |
-| 11 | Phase 8 — Observability (LangSmith, JSON logs, notebook plots) | Todo | — | |
-| 12 | Phase 9 — Streamlit demo | Todo | — | |
-| 13 | Phase 10 — Next.js chat UI (streaming, citation links) | Todo | — | |
-| 14 | Phase 11 — Deployment to VPS with PM2 | Todo | — | |
+| 5 | Phase 2 · Step 1 — Qdrant running locally + collection created | Done | [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md) | Branch `05_qdrant_setup`; local mode (no Docker), `BAAI/bge-small-en-v1.5` (384-dim) via `fastembed` |
+| 6 | Phase 2 · Step 2 — Embed chunks, upsert into Qdrant | Todo | — | |
+| 7 | Phase 2 · Step 3 — Dense vector search / retrieval (top-k + citations) | Todo | — | |
+| 8 | Phase 2 · Step 4 — Hybrid search (dense + keyword/sparse) | Todo | — | |
+| 9 | Phase 2 · Step 5 — Re-ranker on top of hybrid results | Todo | — | |
+| 10 | Phase 3 — LLM layer (LangChain wrappers, 4-provider config switch) | Todo | — | Paid APIs involved — will warn before use |
+| 11 | Phase 4 — Prompts v1 → v2 → v3, compared on eval scores | Todo | — | |
+| 12 | Phase 5 — LangGraph workflow (retrieve → grade → generate → verify → not-found) | Todo | — | |
+| 13 | Phase 6 — FastAPI service + Flask ingestion service | Todo | — | |
+| 14 | Phase 7 — Evaluation (RAGAS, TruLens, custom citation check) | Todo | — | |
+| 15 | Phase 8 — Observability (LangSmith, JSON logs, notebook plots) | Todo | — | |
+| 16 | Phase 9 — Streamlit demo | Todo | — | |
+| 17 | Phase 10 — Next.js chat UI (streaming, citation links) | Todo | — | |
+| 18 | Phase 11 — Deployment to VPS with PM2 | Todo | — | |
 
 **Status values:** `Todo` · `In Progress` · `Done`
 
