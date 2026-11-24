@@ -28,10 +28,16 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
 ## Pieces built so far
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│  (not yet)  │ --> │  (not yet)  │ --> │  (not yet)  │
-└─────────────┘     └─────────────┘     └─────────────┘
+┌───────────┐     ┌───────────┐     ┌─────────────┐     ┌─────────────┐
+│ PDF file  │ --> │ PDFReader │ --> │  Sentence   │ --> │  (not yet:  │
+│           │     │ (pages w/ │     │  Splitter   │     │  embed +    │
+│           │     │ page_label)│     │ (512/50)    │     │  Qdrant)    │
+└───────────┘     └───────────┘     └─────────────┘     └─────────────┘
 ```
+
+PDF ingestion + chunking (`backend/notebooks/01_pdf_ingestion.ipynb`) is the
+first piece built — see
+[learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 

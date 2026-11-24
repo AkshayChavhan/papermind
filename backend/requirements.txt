@@ -1,0 +1,6 @@
+llama-index-core==0.14.26          # loader + chunking framework
+llama-index-readers-file==0.8.0    # PDF page reader
+pypdf==6.21.4                      # underlying PDF text parser
+reportlab==5.1.0                   # generates sample test PDF
+jupyter==1.1.1                     # runs experiment notebooks
+ipykernel==7.4.0                   # notebook's Python kernel
