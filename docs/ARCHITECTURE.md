@@ -28,33 +28,41 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
 ## Pieces built so far
 
 ```
-┌───────────┐     ┌───────────┐     ┌─────────────┐     ┌─────────────┐
-│ PDF file  │ --> │ PDFReader │ --> │  Sentence   │ --> │  fastembed   │
-│           │     │ (pages w/ │     │  Splitter   │     │  (384-dim)   │
-│           │     │ page_label)│     │ (512/50)    │     │      │      │
-└───────────┘     └───────────┘     └─────────────┘     └──────┼──────┘
-                                                                 ▼
-                                                   ┌─────────────────────┐
-                                                   │ Qdrant collection    │
-                                                   │ papermind_chunks     │
-                                                   │ (populated)          │
-                                                   └──────────┬──────────┘
-                                                                ▲
-                            question --(fastembed)--> query vector
-                                                                │
-                                                     query_points (top-k)
+┌───────────┐     ┌───────────┐     ┌─────────────┐
+│ PDF file  │ --> │ PDFReader │ --> │  Sentence   │
+│           │     │ (pages w/ │     │  Splitter   │
+│           │     │ page_label)│     │ (512/50)    │
+└───────────┘     └───────────┘     └──────┬──────┘
+                                             │
+                         ┌───────────────────┴───────────────────┐
+                         ▼                                       ▼
+                  fastembed dense                        fastembed bm25
+                   (384-dim)                                (sparse)
+                         └───────────────────┬───────────────────┘
+                                             ▼
+                              ┌─────────────────────────────┐
+                              │ Qdrant collection             │
+                              │ papermind_chunks               │
+                              │ (named vectors: dense + bm25)  │
+                              └──────────────┬──────────────┘
+                                              ▲
+                  question --(same embedders)--> Prefetch(dense)+Prefetch(bm25)
+                                              │
+                                   FusionQuery(RRF) --> top-k results
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
-upserting the chunks, and dense vector search over them are the pieces
-built so far (`backend/notebooks/01_pdf_ingestion.ipynb`,
-`02_qdrant_setup.ipynb`, `03_embed_upsert.ipynb`, `04_dense_search.ipynb`)
+upserting the chunks, dense search, and hybrid (dense + BM25, fused with
+RRF) search are the pieces built so far
+(`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
+`03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`)
 — see
 [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md),
 [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md),
 [learning/04_rag_pipeline/02_embed_upsert.md](../learning/04_rag_pipeline/02_embed_upsert.md),
+[learning/04_rag_pipeline/03_dense_search.md](../learning/04_rag_pipeline/03_dense_search.md),
 and
-[learning/04_rag_pipeline/03_dense_search.md](../learning/04_rag_pipeline/03_dense_search.md).
+[learning/04_rag_pipeline/04_hybrid_search.md](../learning/04_rag_pipeline/04_hybrid_search.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
