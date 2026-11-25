@@ -14,14 +14,16 @@ Every task we work on gets a row here. Status is updated the moment the task is 
 | 8 | Phase 2 · Step 4 — Hybrid search (dense + keyword/sparse) | Done | [learning/04_rag_pipeline/04_hybrid_search.md](../learning/04_rag_pipeline/04_hybrid_search.md) | Branch `08_hybrid_search`; named `dense`+`bm25` vectors, `fastembed` BM25, RRF fusion via `Prefetch`+`FusionQuery` |
 | 9 | Phase 2 · Step 5 — Re-ranker on top of hybrid results | Done | [learning/04_rag_pipeline/05_reranker.md](../learning/04_rag_pipeline/05_reranker.md) | Branch `09_reranker`; `fastembed` `TextCrossEncoder` (`Xenova/ms-marco-MiniLM-L-6-v2`), over-fetch top 4 from hybrid search then re-rank down to top 2 |
 | 10 | Phase 3 · Step 1 — LangChain LLM wrapper + 4-provider config switch | Done | [learning/05_llm_layer/01_langchain_provider_switch.md](../learning/05_llm_layer/01_langchain_provider_switch.md) | Branch `10_llm_layer`; `get_llm()` factory, OpenAI wired + verified with a real call, Anthropic/Vertex AI/Bedrock stubbed with `NotImplementedError` |
-| 11 | Phase 4 — Prompts v1 → v2 → v3, compared on eval scores | Todo | — | |
-| 12 | Phase 5 — LangGraph workflow (retrieve → grade → generate → verify → not-found) | Todo | — | |
-| 13 | Phase 6 — FastAPI service + Flask ingestion service | Todo | — | |
-| 14 | Phase 7 — Evaluation (RAGAS, TruLens, custom citation check) | Todo | — | |
-| 15 | Phase 8 — Observability (LangSmith, JSON logs, notebook plots) | Todo | — | |
-| 16 | Phase 9 — Streamlit demo | Todo | — | |
-| 17 | Phase 10 — Next.js chat UI (streaming, citation links) | Todo | — | |
-| 18 | Phase 11 — Deployment to VPS with PM2 | Todo | — | |
+| 11 | Phase 4 · Step 1 — Prompt v1 (baseline RAG prompt: question + chunks → answer) | Done | [learning/06_prompts/01_prompt_v1.md](../learning/06_prompts/01_prompt_v1.md) | Branch `11_prompt_v1`; `backend/src/prompts/v1.py`; confirmed naive prompt never cites pages even though `page_label` is available |
+| 12 | Phase 4 · Step 2 — Prompt v2 (add citation/grounding instructions) | Todo | — | |
+| 13 | Phase 4 · Step 3 — Prompt v3 (refuse-if-not-grounded) + compare v1/v2/v3 | Todo | — | Manual comparison only — formal RAGAS/TruLens scoring is task #16 |
+| 14 | Phase 5 — LangGraph workflow (retrieve → grade → generate → verify → not-found) | Todo | — | |
+| 15 | Phase 6 — FastAPI service + Flask ingestion service | Todo | — | |
+| 16 | Phase 7 — Evaluation (RAGAS, TruLens, custom citation check) | Todo | — | |
+| 17 | Phase 8 — Observability (LangSmith, JSON logs, notebook plots) | Todo | — | |
+| 18 | Phase 9 — Streamlit demo | Todo | — | |
+| 19 | Phase 10 — Next.js chat UI (streaming, citation links) | Todo | — | |
+| 20 | Phase 11 — Deployment to VPS with PM2 | Todo | — | |
 
 **Status values:** `Todo` · `In Progress` · `Done`
 
