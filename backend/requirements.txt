@@ -9,3 +9,4 @@ fastembed==0.9.1                   # local embedding model runner
 langchain-core==1.8.4              # BaseChatModel interface, provider-agnostic
 langchain-openai==1.8.5            # LangChain wrapper for OpenAI chat models
 python-dotenv==1.2.4               # loads .env into os.environ
+langgraph==1.2.24                  # graph-based workflow: retrieve/grade/generate/verify
