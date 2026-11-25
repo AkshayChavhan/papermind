@@ -38,17 +38,23 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                                                    │ Qdrant collection    │
                                                    │ papermind_chunks     │
                                                    │ (populated)          │
-                                                   └─────────────────────┘
+                                                   └──────────┬──────────┘
+                                                                ▲
+                            question --(fastembed)--> query vector
+                                                                │
+                                                     query_points (top-k)
 ```
 
-PDF ingestion + chunking, the Qdrant local-mode collection, and embedding +
-upserting the chunks into it are the pieces built so far
-(`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
-`03_embed_upsert.ipynb`) — see
+PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
+upserting the chunks, and dense vector search over them are the pieces
+built so far (`backend/notebooks/01_pdf_ingestion.ipynb`,
+`02_qdrant_setup.ipynb`, `03_embed_upsert.ipynb`, `04_dense_search.ipynb`)
+— see
 [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md),
 [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md),
+[learning/04_rag_pipeline/02_embed_upsert.md](../learning/04_rag_pipeline/02_embed_upsert.md),
 and
-[learning/04_rag_pipeline/02_embed_upsert.md](../learning/04_rag_pipeline/02_embed_upsert.md).
+[learning/04_rag_pipeline/03_dense_search.md](../learning/04_rag_pipeline/03_dense_search.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
