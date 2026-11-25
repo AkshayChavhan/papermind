@@ -109,6 +109,17 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                 chat page: fetch + ReadableStream reader, parses SSE itself
                 citations rendered as styled (page N) badges
                 [verified live: real backend + real `next dev`, real browser click-through]
+
+  Deployment (docker-compose.yml + ecosystem.config.js):
+    docker compose up -d qdrant (server mode, not local-mode)
+            │
+            ├──────────────┬─────────────────────┐
+            ▼               ▼                     ▼
+    pm2: papermind-api  pm2: papermind-ingestion  pm2: papermind-frontend
+    (main_api.py)       (main_ingestion.py)        (next start)
+    [verified for real: 2 separate live processes sharing 1 Qdrant server;
+     PM2 start/health/restart all confirmed. Real VPS access: pending —
+     see docs/DEPLOYMENT.md]
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
@@ -171,7 +182,15 @@ service standalone. Verified with real, separately-running backend and
 frontend dev servers driven from an actual browser — this is also where
 a real CORS port mismatch was caught (port 3000 was already taken by an
 unrelated process on this machine, so the backend's CORS had to accept
-any localhost port, not one fixed origin)
+any localhost port, not one fixed origin). Phase 11 closes the last
+deferred item from tasks #15/#17/#18: `RetrievalPipeline` now supports
+Qdrant **server mode** (`url=`) alongside local-mode, and the fix was
+proven for real — a real `docker compose up` Qdrant server, two real
+separate processes (query + ingestion) running at the same time,
+ingesting through one and querying through the other successfully, all
+managed by a real local PM2 instance (`ecosystem.config.js`). The one
+remaining piece is a real VPS to deploy onto — pending, no SSH/VPS access
+in this environment; see [`docs/DEPLOYMENT.md`](./DEPLOYMENT.md)
 (`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
 `03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`,
 `06_reranker.ipynb`, `07_llm_provider_switch.ipynb`, `08_prompt_v1.ipynb`,
@@ -193,8 +212,9 @@ any localhost port, not one fixed origin)
 [learning/09_evaluation/01_ragas_trulens_citation_check.md](../learning/09_evaluation/01_ragas_trulens_citation_check.md),
 [learning/10_observability/01_json_logging_and_plots.md](../learning/10_observability/01_json_logging_and_plots.md),
 [learning/11_streamlit_demo/01_streamlit_demo.md](../learning/11_streamlit_demo/01_streamlit_demo.md),
+[learning/12_nextjs_chat_ui/01_streaming_chat_citation_links.md](../learning/12_nextjs_chat_ui/01_streaming_chat_citation_links.md),
 and
-[learning/12_nextjs_chat_ui/01_streaming_chat_citation_links.md](../learning/12_nextjs_chat_ui/01_streaming_chat_citation_links.md).
+[learning/13_deployment/01_vps_pm2_deployment.md](../learning/13_deployment/01_vps_pm2_deployment.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
@@ -202,4 +222,5 @@ and
 
 - [TASKS.md](./TASKS.md) — what's being worked on, and what's done
 - [PROJECT_FLOW.md](./PROJECT_FLOW.md) — how a task moves from idea to done, and (later) how data/requests move through the system
+- [DEPLOYMENT.md](./DEPLOYMENT.md) — what's verified locally vs. pending a real VPS
 - [../learning/](../learning/) — step-by-step write-ups of *how* each piece was built and *why*
