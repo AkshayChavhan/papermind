@@ -65,7 +65,12 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                                               ▼
                                     backend/src/prompts/v2.py
                                         page-labeled chunks + cite-every-claim instruction
-                                        [verified: correctly cites (page 1)/(page 4) — v3 next]
+                                        [verified: correctly cites (page 1)/(page 4)]
+                                              │
+                                              ▼
+                                    backend/src/prompts/v3.py
+                                        + refuse-if-not-grounded instruction
+                                        [compared v1/v2/v3 on grounded + ungrounded Qs]
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
@@ -78,11 +83,18 @@ RAG answer prompt itself, v1 → v2 → v3; `backend/src/prompts/v1.py` is the
 deliberately naive baseline, confirmed (via a real OpenAI call on real
 retrieved chunks) to never cite pages, and `backend/src/prompts/v2.py` adds
 page-labeled chunks + a cite-every-claim instruction, confirmed (same real
-pipeline) to correctly cite the right page per claim
+pipeline) to correctly cite the right page per claim.
+`backend/src/prompts/v3.py` adds a refuse-if-not-grounded instruction;
+comparing v1/v2/v3 on a grounded and an ungrounded question found
+gpt-4o-mini already declines fully unrelated context even under v1, so
+v3's real effect so far is a recall/strictness trade-off on partially
+grounded questions rather than blocking outright hallucination — formal
+RAGAS/TruLens evaluation (task #16) is needed to go beyond manual spot
+checks
 (`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
 `03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`,
 `06_reranker.ipynb`, `07_llm_provider_switch.ipynb`, `08_prompt_v1.ipynb`,
-`09_prompt_v2.ipynb`)
+`09_prompt_v2.ipynb`, `10_prompt_v3.ipynb`)
 — see
 [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md),
 [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md),
@@ -92,8 +104,9 @@ pipeline) to correctly cite the right page per claim
 [learning/04_rag_pipeline/05_reranker.md](../learning/04_rag_pipeline/05_reranker.md),
 [learning/05_llm_layer/01_langchain_provider_switch.md](../learning/05_llm_layer/01_langchain_provider_switch.md),
 [learning/06_prompts/01_prompt_v1.md](../learning/06_prompts/01_prompt_v1.md),
+[learning/06_prompts/02_prompt_v2.md](../learning/06_prompts/02_prompt_v2.md),
 and
-[learning/06_prompts/02_prompt_v2.md](../learning/06_prompts/02_prompt_v2.md).
+[learning/06_prompts/03_prompt_v3.md](../learning/06_prompts/03_prompt_v3.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
