@@ -36,8 +36,22 @@ class RetrievalPipeline:
     per question.
     """
 
-    def __init__(self, storage_path: Path, collection_name: str = COLLECTION_NAME):
-        self.client = QdrantClient(path=str(storage_path))
+    def __init__(
+        self,
+        storage_path: Path | None = None,
+        url: str | None = None,
+        collection_name: str = COLLECTION_NAME,
+    ):
+        """Either `storage_path` (local-mode, a file on disk — one process
+        at a time, used by every notebook/demo so far) or `url` (server
+        mode, e.g. `http://localhost:6333` — supports multiple concurrent
+        processes, used in deployment). Exactly one must be given."""
+        if url:
+            self.client = QdrantClient(url=url)
+        elif storage_path:
+            self.client = QdrantClient(path=str(storage_path))
+        else:
+            raise ValueError("RetrievalPipeline needs either storage_path or url")
         self.collection_name = collection_name
         self.dense_embedder = TextEmbedding(model_name=DENSE_MODEL)
         self.sparse_embedder = SparseTextEmbedding(model_name=SPARSE_MODEL)
