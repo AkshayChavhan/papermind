@@ -29,20 +29,26 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
 
 ```
 ┌───────────┐     ┌───────────┐     ┌─────────────┐     ┌─────────────┐
-│ PDF file  │ --> │ PDFReader │ --> │  Sentence   │ --> │   Qdrant     │
-│           │     │ (pages w/ │     │  Splitter   │     │ collection   │
-│           │     │ page_label)│     │ (512/50)    │     │ (384-dim,   │
-│           │     │           │     │             │     │  empty for  │
-│           │     │           │     │             │     │  now)       │
-└───────────┘     └───────────┘     └─────────────┘     └─────────────┘
+│ PDF file  │ --> │ PDFReader │ --> │  Sentence   │ --> │  fastembed   │
+│           │     │ (pages w/ │     │  Splitter   │     │  (384-dim)   │
+│           │     │ page_label)│     │ (512/50)    │     │      │      │
+└───────────┘     └───────────┘     └─────────────┘     └──────┼──────┘
+                                                                 ▼
+                                                   ┌─────────────────────┐
+                                                   │ Qdrant collection    │
+                                                   │ papermind_chunks     │
+                                                   │ (populated)          │
+                                                   └─────────────────────┘
 ```
 
-PDF ingestion + chunking (`backend/notebooks/01_pdf_ingestion.ipynb`) and the
-Qdrant local-mode collection (`backend/notebooks/02_qdrant_setup.ipynb`) are
-the pieces built so far — see
-[learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md)
+PDF ingestion + chunking, the Qdrant local-mode collection, and embedding +
+upserting the chunks into it are the pieces built so far
+(`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
+`03_embed_upsert.ipynb`) — see
+[learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md),
+[learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md),
 and
-[learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md).
+[learning/04_rag_pipeline/02_embed_upsert.md](../learning/04_rag_pipeline/02_embed_upsert.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
