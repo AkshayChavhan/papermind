@@ -48,21 +48,26 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                                               ▲
                   question --(same embedders)--> Prefetch(dense)+Prefetch(bm25)
                                               │
-                                   FusionQuery(RRF) --> top-k results
+                                   FusionQuery(RRF) --> top-k (wide) candidates
+                                              │
+                                   TextCrossEncoder re-rank --> final top-k
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
-upserting the chunks, dense search, and hybrid (dense + BM25, fused with
-RRF) search are the pieces built so far
+upserting the chunks, dense search, hybrid (dense + BM25, fused with RRF)
+search, and a cross-encoder re-ranker on top of the hybrid candidates are
+the pieces built so far — this completes Phase 2 end to end
 (`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
-`03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`)
+`03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`,
+`06_reranker.ipynb`)
 — see
 [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md),
 [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md),
 [learning/04_rag_pipeline/02_embed_upsert.md](../learning/04_rag_pipeline/02_embed_upsert.md),
 [learning/04_rag_pipeline/03_dense_search.md](../learning/04_rag_pipeline/03_dense_search.md),
+[learning/04_rag_pipeline/04_hybrid_search.md](../learning/04_rag_pipeline/04_hybrid_search.md),
 and
-[learning/04_rag_pipeline/04_hybrid_search.md](../learning/04_rag_pipeline/04_hybrid_search.md).
+[learning/04_rag_pipeline/05_reranker.md](../learning/04_rag_pipeline/05_reranker.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 

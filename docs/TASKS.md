@@ -12,7 +12,7 @@ Every task we work on gets a row here. Status is updated the moment the task is 
 | 6 | Phase 2 · Step 2 — Embed chunks, upsert into Qdrant | Done | [learning/04_rag_pipeline/02_embed_upsert.md](../learning/04_rag_pipeline/02_embed_upsert.md) | Branch `06_embed_upsert`; `fastembed` vectors, uuid5 point IDs (idempotent re-runs), payload has `text`/`page_label`/`file_name`/`chunk_index` |
 | 7 | Phase 2 · Step 3 — Dense vector search / retrieval (top-k + citations) | Done | [learning/04_rag_pipeline/03_dense_search.md](../learning/04_rag_pipeline/03_dense_search.md) | Branch `07_dense_search`; `query_points` API, verified top result matches the right page |
 | 8 | Phase 2 · Step 4 — Hybrid search (dense + keyword/sparse) | Done | [learning/04_rag_pipeline/04_hybrid_search.md](../learning/04_rag_pipeline/04_hybrid_search.md) | Branch `08_hybrid_search`; named `dense`+`bm25` vectors, `fastembed` BM25, RRF fusion via `Prefetch`+`FusionQuery` |
-| 9 | Phase 2 · Step 5 — Re-ranker on top of hybrid results | Todo | — | |
+| 9 | Phase 2 · Step 5 — Re-ranker on top of hybrid results | Done | [learning/04_rag_pipeline/05_reranker.md](../learning/04_rag_pipeline/05_reranker.md) | Branch `09_reranker`; `fastembed` `TextCrossEncoder` (`Xenova/ms-marco-MiniLM-L-6-v2`), over-fetch top 4 from hybrid search then re-rank down to top 2 |
 | 10 | Phase 3 — LLM layer (LangChain wrappers, 4-provider config switch) | Todo | — | Paid APIs involved — will warn before use |
 | 11 | Phase 4 — Prompts v1 → v2 → v3, compared on eval scores | Todo | — | |
 | 12 | Phase 5 — LangGraph workflow (retrieve → grade → generate → verify → not-found) | Todo | — | |
