@@ -7,10 +7,13 @@ ipykernel==7.4.0                   # notebook's Python kernel
 qdrant-client==1.20.0              # vector DB client (local mode)
 fastembed==0.9.1                   # local embedding model runner
 langchain-core==1.8.4              # BaseChatModel interface, provider-agnostic
-langchain-openai==1.8.5            # LangChain wrapper for OpenAI chat models
+langchain-openai==1.1.9            # LangChain wrapper for OpenAI chat models (pinned down by ragas)
 python-dotenv==1.2.4               # loads .env into os.environ
 langgraph==1.2.24                  # graph-based workflow: retrieve/grade/generate/verify
 fastapi==0.165.0                   # main query API (/ask)
 uvicorn==0.54.0                    # ASGI server for FastAPI
 flask==3.1.3                       # ingestion service (/ingest)
 python-multipart==0.0.34           # FastAPI/Starlette file-upload form parsing
+ragas==0.4.4                       # faithfulness metric
+trulens==2.16.0                    # groundedness metric (independent library, for comparison)
+trulens-providers-openai==2.16.0   # OpenAI-backed feedback functions for trulens
