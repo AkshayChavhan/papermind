@@ -17,3 +17,4 @@ python-multipart==0.0.34           # FastAPI/Starlette file-upload form parsing
 ragas==0.4.4                       # faithfulness metric
 trulens==2.16.0                    # groundedness metric (independent library, for comparison)
 trulens-providers-openai==2.16.0   # OpenAI-backed feedback functions for trulens
+matplotlib==3.11.2                 # notebook plots for Phase 8 observability

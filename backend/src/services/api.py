@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 from src.graph import build_graph
 from src.llm import get_llm
+from src.observability import timed_invoke
 from src.retrieval import RetrievalPipeline
 
 
@@ -32,7 +33,7 @@ def create_app(pipeline: RetrievalPipeline, provider: str = "openai") -> FastAPI
 
     @app.post("/ask", response_model=AskResponse)
     def ask(request: AskRequest) -> AskResponse:
-        result = graph.invoke({"question": request.question})
+        result = timed_invoke(graph, request.question)
         pages = [chunk["page_label"] for chunk in (result["chunks"] or [])]
         return AskResponse(answer=result["answer"], grounded=bool(result["grounded"]), pages=pages)
 

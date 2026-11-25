@@ -91,6 +91,11 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                             [+ RAGAS faithfulness, TruLens groundedness in notebook 13 —
                              both libraries disagree sharply on refusal answers; the
                              custom citation metric is the one that behaves as designed]
+                                              │
+                                              ▼
+                        backend/src/observability/request_log.py
+                            timed_invoke(graph, question) --> data/logs/requests.jsonl
+                            [wired into POST /ask; LangSmith pending a real API key]
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
@@ -131,12 +136,17 @@ inconsistently depending on context, and TruLens stayed high regardless
 of actual correctness — neither targets citation correctness directly,
 which is why `backend/src/evaluation/citation_check.py`'s
 `citation_precision()` exists as a code-only, deterministic third check,
-and it's the one that behaved exactly as designed
+and it's the one that behaved exactly as designed. Phase 8 adds JSON
+request logging (`backend/src/observability/request_log.py`'s
+`timed_invoke`, wired into `POST /ask`) and a notebook that plots logged
+latency — refused answers measurably short-circuit `grade` 2–4x faster
+than a full grounded answer. LangSmith tracing is documented in
+`.env.example` but not yet exercised — no `LANGCHAIN_API_KEY` configured
 (`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
 `03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`,
 `06_reranker.ipynb`, `07_llm_provider_switch.ipynb`, `08_prompt_v1.ipynb`,
 `09_prompt_v2.ipynb`, `10_prompt_v3.ipynb`, `11_langgraph_workflow.ipynb`,
-`12_api_services.ipynb`, `13_evaluation.ipynb`)
+`12_api_services.ipynb`, `13_evaluation.ipynb`, `14_observability.ipynb`)
 — see
 [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md),
 [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md),
@@ -150,8 +160,9 @@ and it's the one that behaved exactly as designed
 [learning/06_prompts/03_prompt_v3.md](../learning/06_prompts/03_prompt_v3.md),
 [learning/07_langgraph/01_langgraph_workflow.md](../learning/07_langgraph/01_langgraph_workflow.md),
 [learning/08_api_services/01_fastapi_flask_services.md](../learning/08_api_services/01_fastapi_flask_services.md),
+[learning/09_evaluation/01_ragas_trulens_citation_check.md](../learning/09_evaluation/01_ragas_trulens_citation_check.md),
 and
-[learning/09_evaluation/01_ragas_trulens_citation_check.md](../learning/09_evaluation/01_ragas_trulens_citation_check.md).
+[learning/10_observability/01_json_logging_and_plots.md](../learning/10_observability/01_json_logging_and_plots.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
