@@ -84,6 +84,13 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
             backend/src/services/ingestion_service.py   backend/src/services/api.py
                 Flask: POST /ingest                       FastAPI: POST /ask
                 [verified: real upload -> 4 chunks]        [verified: real ask -> cited answer]
+                                              │
+                                              ▼
+                        backend/src/evaluation/citation_check.py
+                            citation_precision(answer, chunks)
+                            [+ RAGAS faithfulness, TruLens groundedness in notebook 13 —
+                             both libraries disagree sharply on refusal answers; the
+                             custom citation metric is the one that behaves as designed]
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
@@ -117,12 +124,19 @@ a known gap for task #16 to close. Phase 6 exposes that graph over HTTP:
 verified with a real ingest → ask round trip. Local-mode Qdrant's file
 lock means these two can't run as separate live processes yet — both
 were tested in-process, sharing one `RetrievalPipeline`; moving to Qdrant
-server mode for real concurrent processes is Phase 11's job
+server mode for real concurrent processes is Phase 11's job. Phase 7 adds
+formal evaluation: RAGAS faithfulness and TruLens groundedness (both
+run in `13_evaluation.ipynb`) scored the same literal refusal answer
+inconsistently depending on context, and TruLens stayed high regardless
+of actual correctness — neither targets citation correctness directly,
+which is why `backend/src/evaluation/citation_check.py`'s
+`citation_precision()` exists as a code-only, deterministic third check,
+and it's the one that behaved exactly as designed
 (`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
 `03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`,
 `06_reranker.ipynb`, `07_llm_provider_switch.ipynb`, `08_prompt_v1.ipynb`,
 `09_prompt_v2.ipynb`, `10_prompt_v3.ipynb`, `11_langgraph_workflow.ipynb`,
-`12_api_services.ipynb`)
+`12_api_services.ipynb`, `13_evaluation.ipynb`)
 — see
 [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md),
 [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md),
@@ -135,8 +149,9 @@ server mode for real concurrent processes is Phase 11's job
 [learning/06_prompts/02_prompt_v2.md](../learning/06_prompts/02_prompt_v2.md),
 [learning/06_prompts/03_prompt_v3.md](../learning/06_prompts/03_prompt_v3.md),
 [learning/07_langgraph/01_langgraph_workflow.md](../learning/07_langgraph/01_langgraph_workflow.md),
+[learning/08_api_services/01_fastapi_flask_services.md](../learning/08_api_services/01_fastapi_flask_services.md),
 and
-[learning/08_api_services/01_fastapi_flask_services.md](../learning/08_api_services/01_fastapi_flask_services.md).
+[learning/09_evaluation/01_ragas_trulens_citation_check.md](../learning/09_evaluation/01_ragas_trulens_citation_check.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
