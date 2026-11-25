@@ -100,6 +100,15 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                                               ▼
                         backend/streamlit_app.py (single process, own pipeline+graph)
                             [verified live in a real browser: upload -> ingest -> cited answer]
+                                              │
+                                              ▼
+            backend: POST /ask/stream (SSE, src/graph/streaming.py)
+                            │
+                            ▼
+            frontend/ (Next.js 16, App Router) — src/app/page.tsx
+                chat page: fetch + ReadableStream reader, parses SSE itself
+                citations rendered as styled (page N) badges
+                [verified live: real backend + real `next dev`, real browser click-through]
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
@@ -151,7 +160,18 @@ Phase 9 adds `backend/streamlit_app.py`, a single-process demo (own
 rather than fighting it) verified end to end in a real browser: real PDF
 upload, real ingest, a real cited answer, and a real refusal — the same
 `grade` non-determinism from tasks #14/#16 surfaced a 4th time, live in
-the UI
+the UI. Phase 10 adds the real front-end: `backend/src/graph/streaming.py`
+streams the `generate` step's tokens over a new `POST /ask/stream` SSE
+endpoint (a parallel path alongside the unchanged, non-streaming
+`POST /ask`), and `frontend/` (Next.js 16, TypeScript, App Router) is a
+single chat page that reads that stream itself (no `EventSource`, since
+it needs a POST body) and renders `(page N)` citations as styled badges.
+`backend/run_api.py` is a new real entrypoint for running the FastAPI
+service standalone. Verified with real, separately-running backend and
+frontend dev servers driven from an actual browser — this is also where
+a real CORS port mismatch was caught (port 3000 was already taken by an
+unrelated process on this machine, so the backend's CORS had to accept
+any localhost port, not one fixed origin)
 (`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
 `03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`,
 `06_reranker.ipynb`, `07_llm_provider_switch.ipynb`, `08_prompt_v1.ipynb`,
@@ -172,8 +192,9 @@ the UI
 [learning/08_api_services/01_fastapi_flask_services.md](../learning/08_api_services/01_fastapi_flask_services.md),
 [learning/09_evaluation/01_ragas_trulens_citation_check.md](../learning/09_evaluation/01_ragas_trulens_citation_check.md),
 [learning/10_observability/01_json_logging_and_plots.md](../learning/10_observability/01_json_logging_and_plots.md),
+[learning/11_streamlit_demo/01_streamlit_demo.md](../learning/11_streamlit_demo/01_streamlit_demo.md),
 and
-[learning/11_streamlit_demo/01_streamlit_demo.md](../learning/11_streamlit_demo/01_streamlit_demo.md).
+[learning/12_nextjs_chat_ui/01_streaming_chat_citation_links.md](../learning/12_nextjs_chat_ui/01_streaming_chat_citation_links.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
