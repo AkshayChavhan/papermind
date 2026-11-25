@@ -9,7 +9,7 @@ Every task we work on gets a row here. Status is updated the moment the task is 
 | 3 | Phase 1 · Step 1 — project structure + Python env | Done | [learning/02_backend_setup/01_project_setup.md](../learning/02_backend_setup/01_project_setup.md) | Branch `03_project_setup`; chose `venv` over `conda`/`uv` |
 | 4 | Phase 1 · Step 2 — PDF ingestion w/ LlamaIndex loaders + chunking | Done | [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md) | Branch `04_pdf_ingestion`; `PDFReader` + `SentenceSplitter` (512/50), page_label kept through chunking |
 | 5 | Phase 2 · Step 1 — Qdrant running locally + collection created | Done | [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md) | Branch `05_qdrant_setup`; local mode (no Docker), `BAAI/bge-small-en-v1.5` (384-dim) via `fastembed` |
-| 6 | Phase 2 · Step 2 — Embed chunks, upsert into Qdrant | Todo | — | |
+| 6 | Phase 2 · Step 2 — Embed chunks, upsert into Qdrant | Done | [learning/04_rag_pipeline/02_embed_upsert.md](../learning/04_rag_pipeline/02_embed_upsert.md) | Branch `06_embed_upsert`; `fastembed` vectors, uuid5 point IDs (idempotent re-runs), payload has `text`/`page_label`/`file_name`/`chunk_index` |
 | 7 | Phase 2 · Step 3 — Dense vector search / retrieval (top-k + citations) | Todo | — | |
 | 8 | Phase 2 · Step 4 — Hybrid search (dense + keyword/sparse) | Todo | — | |
 | 9 | Phase 2 · Step 5 — Re-ranker on top of hybrid results | Todo | — | |
