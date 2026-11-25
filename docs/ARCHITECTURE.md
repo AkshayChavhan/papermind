@@ -96,6 +96,10 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                         backend/src/observability/request_log.py
                             timed_invoke(graph, question) --> data/logs/requests.jsonl
                             [wired into POST /ask; LangSmith pending a real API key]
+                                              │
+                                              ▼
+                        backend/streamlit_app.py (single process, own pipeline+graph)
+                            [verified live in a real browser: upload -> ingest -> cited answer]
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
@@ -141,7 +145,13 @@ request logging (`backend/src/observability/request_log.py`'s
 `timed_invoke`, wired into `POST /ask`) and a notebook that plots logged
 latency — refused answers measurably short-circuit `grade` 2–4x faster
 than a full grounded answer. LangSmith tracing is documented in
-`.env.example` but not yet exercised — no `LANGCHAIN_API_KEY` configured
+`.env.example` but not yet exercised — no `LANGCHAIN_API_KEY` configured.
+Phase 9 adds `backend/streamlit_app.py`, a single-process demo (own
+`RetrievalPipeline` + graph, sidestepping the Qdrant local-mode lock
+rather than fighting it) verified end to end in a real browser: real PDF
+upload, real ingest, a real cited answer, and a real refusal — the same
+`grade` non-determinism from tasks #14/#16 surfaced a 4th time, live in
+the UI
 (`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
 `03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`,
 `06_reranker.ipynb`, `07_llm_provider_switch.ipynb`, `08_prompt_v1.ipynb`,
@@ -161,8 +171,9 @@ than a full grounded answer. LangSmith tracing is documented in
 [learning/07_langgraph/01_langgraph_workflow.md](../learning/07_langgraph/01_langgraph_workflow.md),
 [learning/08_api_services/01_fastapi_flask_services.md](../learning/08_api_services/01_fastapi_flask_services.md),
 [learning/09_evaluation/01_ragas_trulens_citation_check.md](../learning/09_evaluation/01_ragas_trulens_citation_check.md),
+[learning/10_observability/01_json_logging_and_plots.md](../learning/10_observability/01_json_logging_and_plots.md),
 and
-[learning/10_observability/01_json_logging_and_plots.md](../learning/10_observability/01_json_logging_and_plots.md).
+[learning/11_streamlit_demo/01_streamlit_demo.md](../learning/11_streamlit_demo/01_streamlit_demo.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 

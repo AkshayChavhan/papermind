@@ -24,3 +24,4 @@ build/
 
 # Generated sample data (reproducible from scripts, not committed)
 backend/notebooks/data/
+backend/data/
