@@ -78,6 +78,12 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                                         retrieve -> grade -(relevant?)-> generate -> verify
                                                       │                               │
                                                       └──(not)──> not_found <─(not grounded)┘
+                                              │
+                        ┌─────────────────────┴─────────────────────┐
+                        ▼                                           ▼
+            backend/src/services/ingestion_service.py   backend/src/services/api.py
+                Flask: POST /ingest                       FastAPI: POST /ask
+                [verified: real upload -> 4 chunks]        [verified: real ask -> cited answer]
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
@@ -105,11 +111,18 @@ out of notebooks into `backend/src/retrieval/pipeline.py`'s
 grounded, an off-topic, and a topically-close-but-ungrounded question;
 `grade` turned out to catch both negative cases before generation, so
 `verify`'s citation check hasn't yet been exercised by a real failure —
-a known gap for task #16 to close
+a known gap for task #16 to close. Phase 6 exposes that graph over HTTP:
+`backend/src/services/api.py` (FastAPI, `POST /ask`) and
+`backend/src/services/ingestion_service.py` (Flask, `POST /ingest`),
+verified with a real ingest → ask round trip. Local-mode Qdrant's file
+lock means these two can't run as separate live processes yet — both
+were tested in-process, sharing one `RetrievalPipeline`; moving to Qdrant
+server mode for real concurrent processes is Phase 11's job
 (`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
 `03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`,
 `06_reranker.ipynb`, `07_llm_provider_switch.ipynb`, `08_prompt_v1.ipynb`,
-`09_prompt_v2.ipynb`, `10_prompt_v3.ipynb`, `11_langgraph_workflow.ipynb`)
+`09_prompt_v2.ipynb`, `10_prompt_v3.ipynb`, `11_langgraph_workflow.ipynb`,
+`12_api_services.ipynb`)
 — see
 [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md),
 [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md),
@@ -121,8 +134,9 @@ a known gap for task #16 to close
 [learning/06_prompts/01_prompt_v1.md](../learning/06_prompts/01_prompt_v1.md),
 [learning/06_prompts/02_prompt_v2.md](../learning/06_prompts/02_prompt_v2.md),
 [learning/06_prompts/03_prompt_v3.md](../learning/06_prompts/03_prompt_v3.md),
+[learning/07_langgraph/01_langgraph_workflow.md](../learning/07_langgraph/01_langgraph_workflow.md),
 and
-[learning/07_langgraph/01_langgraph_workflow.md](../learning/07_langgraph/01_langgraph_workflow.md).
+[learning/08_api_services/01_fastapi_flask_services.md](../learning/08_api_services/01_fastapi_flask_services.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
