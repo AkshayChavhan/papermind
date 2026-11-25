@@ -71,6 +71,13 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                                     backend/src/prompts/v3.py
                                         + refuse-if-not-grounded instruction
                                         [compared v1/v2/v3 on grounded + ungrounded Qs]
+                                              │
+                                              ▼
+                                    backend/src/graph/workflow.py
+                                        build_graph(pipeline, llm):
+                                        retrieve -> grade -(relevant?)-> generate -> verify
+                                                      │                               │
+                                                      └──(not)──> not_found <─(not grounded)┘
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
@@ -90,11 +97,19 @@ gpt-4o-mini already declines fully unrelated context even under v1, so
 v3's real effect so far is a recall/strictness trade-off on partially
 grounded questions rather than blocking outright hallucination — formal
 RAGAS/TruLens evaluation (task #16) is needed to go beyond manual spot
-checks
+checks. Phase 5 wires retrieval + `get_llm()` + prompt v3 into one
+LangGraph workflow (`backend/src/graph/workflow.py`), with a `grade` gate
+before generation and a `verify` gate after; retrieval logic itself moved
+out of notebooks into `backend/src/retrieval/pipeline.py`'s
+`RetrievalPipeline` so the graph can call it as code. Verified on a
+grounded, an off-topic, and a topically-close-but-ungrounded question;
+`grade` turned out to catch both negative cases before generation, so
+`verify`'s citation check hasn't yet been exercised by a real failure —
+a known gap for task #16 to close
 (`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
 `03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`,
 `06_reranker.ipynb`, `07_llm_provider_switch.ipynb`, `08_prompt_v1.ipynb`,
-`09_prompt_v2.ipynb`, `10_prompt_v3.ipynb`)
+`09_prompt_v2.ipynb`, `10_prompt_v3.ipynb`, `11_langgraph_workflow.ipynb`)
 — see
 [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md),
 [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md),
@@ -105,8 +120,9 @@ checks
 [learning/05_llm_layer/01_langchain_provider_switch.md](../learning/05_llm_layer/01_langchain_provider_switch.md),
 [learning/06_prompts/01_prompt_v1.md](../learning/06_prompts/01_prompt_v1.md),
 [learning/06_prompts/02_prompt_v2.md](../learning/06_prompts/02_prompt_v2.md),
+[learning/06_prompts/03_prompt_v3.md](../learning/06_prompts/03_prompt_v3.md),
 and
-[learning/06_prompts/03_prompt_v3.md](../learning/06_prompts/03_prompt_v3.md).
+[learning/07_langgraph/01_langgraph_workflow.md](../learning/07_langgraph/01_langgraph_workflow.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
