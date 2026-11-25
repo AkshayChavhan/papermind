@@ -51,23 +51,31 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                                    FusionQuery(RRF) --> top-k (wide) candidates
                                               │
                                    TextCrossEncoder re-rank --> final top-k
+                                              │
+                                              ▼
+                                    backend/src/llm/providers.py
+                                        get_llm("openai") --> ChatOpenAI  [wired + tested]
+                                        get_llm("anthropic"/"vertexai"/"bedrock") --> not wired yet
 ```
 
 PDF ingestion + chunking, the Qdrant local-mode collection, embedding +
 upserting the chunks, dense search, hybrid (dense + BM25, fused with RRF)
-search, and a cross-encoder re-ranker on top of the hybrid candidates are
-the pieces built so far — this completes Phase 2 end to end
+search, and a cross-encoder re-ranker on top of the hybrid candidates
+complete Phase 2 end to end. Phase 3 adds a swappable LLM layer
+(`backend/src/llm/providers.py`'s `get_llm()`), with OpenAI wired up and
+tested and the other 3 providers stubbed for now
 (`backend/notebooks/01_pdf_ingestion.ipynb`, `02_qdrant_setup.ipynb`,
 `03_embed_upsert.ipynb`, `04_dense_search.ipynb`, `05_hybrid_search.ipynb`,
-`06_reranker.ipynb`)
+`06_reranker.ipynb`, `07_llm_provider_switch.ipynb`)
 — see
 [learning/03_documents_ingestion/01_pdf_ingestion_chunking.md](../learning/03_documents_ingestion/01_pdf_ingestion_chunking.md),
 [learning/04_rag_pipeline/01_qdrant_setup.md](../learning/04_rag_pipeline/01_qdrant_setup.md),
 [learning/04_rag_pipeline/02_embed_upsert.md](../learning/04_rag_pipeline/02_embed_upsert.md),
 [learning/04_rag_pipeline/03_dense_search.md](../learning/04_rag_pipeline/03_dense_search.md),
 [learning/04_rag_pipeline/04_hybrid_search.md](../learning/04_rag_pipeline/04_hybrid_search.md),
+[learning/04_rag_pipeline/05_reranker.md](../learning/04_rag_pipeline/05_reranker.md),
 and
-[learning/04_rag_pipeline/05_reranker.md](../learning/04_rag_pipeline/05_reranker.md).
+[learning/05_llm_layer/01_langchain_provider_switch.md](../learning/05_llm_layer/01_langchain_provider_switch.md).
 
 (Updates as each phase in [TASKS.md](./TASKS.md) actually lands.)
 
