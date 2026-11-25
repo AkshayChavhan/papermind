@@ -1,4 +1,4 @@
-# 01 — Phase 8: Observability (JSON logging + notebook plots; LangSmith pending)
+# 01 — Phase 8: Observability (JSON logging + notebook plots + LangSmith tracing)
 
 ## What's about to happen
 
@@ -15,13 +15,14 @@ Phase 8 makes that durable and visual instead of disposable:
 2. **Notebook plots** — a small notebook replays several questions through
    the logger, then reads the log file back and plots latency and the
    grounded/refused split with `matplotlib`.
-3. **LangSmith — pending a credential, not skipped silently.** The stack
-   decision calls for LangSmith tracing. There's no `LANGCHAIN_API_KEY`
-   in `.env` yet (no account/key has been created). Rather than fake a
-   trace or leave LangSmith unmentioned, this task adds the `.env.example`
-   entries and documents exactly what flipping them on will do — LangChain
-   and LangGraph both auto-instrument from environment variables alone,
-   so no code change is actually needed once the key exists.
+3. **LangSmith tracing — now verified with a real key.** The stack
+   decision calls for LangSmith tracing. Initially there was no
+   `LANGCHAIN_API_KEY` in `.env`, so this task added the `.env.example`
+   entries and documented what flipping them on would do. The user has
+   since created a LangSmith account and added a real key to `backend/.env`
+   — this update confirms the prediction was correct: LangChain and
+   LangGraph auto-instrument purely from environment variables, with zero
+   code change in `get_llm()` or `build_graph()`.
 
 ## Why this way
 
@@ -71,7 +72,7 @@ explanation.
                                         latency + grounded/refused split
 
   LangSmith tracing: LANGCHAIN_TRACING_V2=true + LANGCHAIN_API_KEY in .env
-  (not set yet — pending; see "What we did")
+  (real key set — verified; see "What we did")
 ```
 
 ## What we did
@@ -102,8 +103,17 @@ explanation.
    - 5 rows logged, 5 rows read back, `duration_s` and `grounded` matched
      what each question's live run printed — confirms `timed_invoke`
      isn't silently dropping or miscounting requests.
-6. **LangSmith**: genuinely not exercised — no `LANGCHAIN_API_KEY` is
-   configured. The `.env.example` entries are in place and documented;
-   turning tracing on later needs only those two environment variables
-   set in `.env`, no code change in `get_llm()` or `build_graph()`. This
-   is recorded as a known-pending item, not quietly treated as done.
+6. **LangSmith — verified for real (2026-11-25).** The user created a
+   LangSmith account and added a real `LANGCHAIN_API_KEY` +
+   `LANGCHAIN_PROJECT=papermind` to `backend/.env`. Confirmed end-to-end,
+   not just "the env vars are set":
+   - Ran `get_llm("openai").invoke("Say OK")` with the real key loaded —
+     no code change needed in `get_llm()` or `build_graph()`, exactly as
+     predicted.
+   - Queried the LangSmith REST API (`GET /sessions`) and found the
+     `papermind` project already exists.
+   - Queried `POST /runs/query` for that project and got back a real
+     logged run: `ChatOpenAI`, `run_type: llm`, timestamped at the moment
+     the call above was made.
+   This closes the one item this task had left pending — tracing is live,
+   not just wired.

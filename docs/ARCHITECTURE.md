@@ -95,7 +95,7 @@ since the primary stack outside this is JS/TS (React, Next.js, Node).
                                               ▼
                         backend/src/observability/request_log.py
                             timed_invoke(graph, question) --> data/logs/requests.jsonl
-                            [wired into POST /ask; LangSmith pending a real API key]
+                            [wired into POST /ask; LangSmith tracing verified live]
                                               │
                                               ▼
                         backend/streamlit_app.py (single process, own pipeline+graph)
@@ -164,8 +164,11 @@ and it's the one that behaved exactly as designed. Phase 8 adds JSON
 request logging (`backend/src/observability/request_log.py`'s
 `timed_invoke`, wired into `POST /ask`) and a notebook that plots logged
 latency — refused answers measurably short-circuit `grade` 2–4x faster
-than a full grounded answer. LangSmith tracing is documented in
-`.env.example` but not yet exercised — no `LANGCHAIN_API_KEY` configured.
+than a full grounded answer. LangSmith tracing (documented in
+`.env.example` since Phase 8) is now verified live: a real
+`LANGCHAIN_API_KEY` was added to `backend/.env` and a real `ChatOpenAI`
+run showed up in the `papermind` LangSmith project, with zero code
+change in `get_llm()`/`build_graph()`.
 Phase 9 adds `backend/streamlit_app.py`, a single-process demo (own
 `RetrievalPipeline` + graph, sidestepping the Qdrant local-mode lock
 rather than fighting it) verified end to end in a real browser: real PDF
